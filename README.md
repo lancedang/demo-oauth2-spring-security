@@ -1,39 +1,36 @@
-# demo-oauth2-spring-security
+## demo-oauth2-spring-security
 
-A simple Password Flow demo with Spring Security OAuth 2
+- 简单的 Password Flow demo with Spring Security OAuth 2，只有 AuthorizationServer 和 ResourceServer 没有 Client 服务
+- 授权模式为 password 模式，直接通过 postman 实现
 
-## Testing
+#### 直接访问资源
 
-You can use [Postman](https://www.getpostman.com/) to test it.
+1. 直接访问资源 http://localhost:8080/products 报出"unauthorized exception message"
 
-### First you'll need to get the access_token
+#### 要想正确访问资源，需首先获取授权码 access token
 
-1. Create a POST request for the address: http://localhost:8080/oauth/token
-
-2. You have to pass Basic Auth too, this is the client credentials, not the user. In this example the username is "client" and password "clientpassword" (without quotes).
-
-The authorization header will looks like: 
+- 创建一个获取 token 的 post 请求 http://localhost:8080/oauth/token
+- post 请求选择 Authorization 种的 Basic Auth, 输入 username 和 password， 此案例中 username 是 "client"， password 是 "clientpassword" (无引号) 
+Authorization 是一个 Client credentials 但不是 user, 当发送请求的时候该 Authorization 自动变成 Http Header
+authorization header 形式如下 
 Authorization : Basic Y2xpZW50OmNsaWVudHBhc3N3b3Jk
-
-3. Set the Content-Type header to application/x-www-form-urlencoded
+- 设定Header  Content-Type 为 application/x-www-form-urlencoded
 
 ![alt text](https://snag.gy/FSs0Cw.jpg)
 
-4. Set the body
+- 设定 body, 选择body 格式： x-www-form-urlencoded 设定如下key-value:
 
-You'll have to choose x-www-form-urlencoded and set the values:
+    - client_id   client
 
-client_id   client
+    - username    user
 
-username    user
+    - password    user
 
-password    user
-
-grant_type  password
+    - grant_type  password
 
 ![alt text](https://snag.gy/HlJZRq.jpg)
 
-When you hit the send button, you'll get something like that:
+- 发送结果
 
 ```json
 {
@@ -44,19 +41,19 @@ When you hit the send button, you'll get something like that:
 }
 ```
 
-### Calling the API
+#### 重新访问受限资源
 
-Now you are able to call the API using the access token
+- 此次访问受限资源携带 access token
 
-1. Create a GET request in Postman with the URL http://localhost:8080/products
+- 创建 get 请求 URL http://localhost:8080/products
 
-2. Set the Authorization header with Bearer <token>
+- 直接设定 Authorization， 这次选择 Bearer Token, 直接填入上一步获得的access token ,点击send 会自动产生如下 header
 
-Key: Authorization
+    - Key: Authorization
 
-Value: Bearer bd999429-898b-4201-908e-40e846ec0105
+    - Value: Bearer bd999429-898b-4201-908e-40e846ec0105
 
-That's all! When you hit the Send button, you'll receive:
+- 访问结果
 
 ```json
 [
