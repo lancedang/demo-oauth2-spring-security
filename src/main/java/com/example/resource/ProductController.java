@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/products")
-public class ProductResource {
+public class ProductController {
 
 	@GetMapping
 	public List<Product> list() {
